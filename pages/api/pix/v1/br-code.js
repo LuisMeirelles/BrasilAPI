@@ -35,7 +35,6 @@ const action = async (request, response) => {
     throw new InternalError({
       message: `Erro ao gerar o BR Code`,
       name: 'BR_CODE_PIX_GENERATION_ERROR',
-      errors: [error.message],
     });
   }
 };

@@ -38,7 +38,6 @@ const emvSpecification = {
       additionalInfo: {
         id: '02',
         description: 'Informações adicionais opcionais [additionalInfo]',
-        required: false,
         minLength: 1,
         maxLength: 99,
       },
@@ -55,7 +54,6 @@ const emvSpecification = {
   transactionAmount: {
     id: '54',
     description: 'Valor da transação [transactionAmount]',
-    required: false,
     minLength: 1,
     maxLength: 13,
   },

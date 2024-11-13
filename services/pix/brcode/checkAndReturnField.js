@@ -14,6 +14,8 @@ import BadRequestError from '@/errors/BadRequestError';
  */
 
 /**
+ * If valid, returns the value of the field. Otherwise, throws an error.
+ *
  * @param {Field} field
  *
  * @param {string} value
@@ -32,27 +34,35 @@ export const checkAndReturnField = (field, value) => {
     }
 
     throw new BadRequestError({
-      message: `O campo ${field.description} é obrigatório.`,
+      message: `O campo '${field.description}' é obrigatório.`,
     });
   }
 
   if (field.length && value.length !== field.length) {
-    errors.push(`O campo deve ter exatamente ${field.length} caracteres.`);
+    errors.push(
+      `O campo '${field.description}' deve ter exatamente ${field.length} caracteres.`
+    );
   }
 
   if (field.minLength && value.length < field.minLength) {
-    errors.push(`O campo deve ter no mínimo ${field.minLength} caracteres.`);
+    errors.push(
+      `O campo '${field.description}' deve ter no mínimo ${field.minLength} caracteres.`
+    );
   }
 
   if (field.maxLength && value.length > field.maxLength) {
-    errors.push(`O campo deve ter no máximo ${field.maxLength} caracteres.`);
+    errors.push(
+      `O campo '${field.description}' deve ter no máximo ${field.maxLength} caracteres.`
+    );
   }
 
   if (typeof field.validate === 'function') {
     const fieldValid = field.validate(value);
 
     if (!fieldValid) {
-      errors.push(`Campo inválido (validação personalizada).`);
+      errors.push(
+        `O campo '${field.description}' é inválido (validação personalizada).`
+      );
     }
   }
 
@@ -62,7 +72,7 @@ export const checkAndReturnField = (field, value) => {
 
   if (errors.length > 1) {
     throw new BadRequestError({
-      message: `O campo ${field.description} não é válido.`,
+      message: `O campo '${field.description}' não é válido.`,
       errors,
     });
   }
