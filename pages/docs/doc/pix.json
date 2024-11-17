@@ -238,24 +238,42 @@
           "merchantCity": "Florianópolis",
           "merchantName": "João da Silva",
           "transactionId": "123456789",
-          "postalCode": "12345-678",
-          "transactionAmount": 123.45
+          "postalCode": "12345678",
+          "transactionAmount": 432.1
         }
       },
       "PIX_BR_CODE_RESPONSE_200": {
         "title": "Pix Br Code Response 200",
         "type": "object",
         "required": [
-          "pixCopiaCola"
+          "pixCopiaCola",
+          "data"
         ],
         "properties": {
           "pixCopiaCola": {
             "type": "string",
             "description": "Pix copia e cola em formato de texto (o QR Code pode ser gerado a partir desse texto)"
+          },
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PIX_BR_CODE_REQUEST_BODY"
+              }
+            ],
+            "description": "Dados com o mesmo formato da requisição utilizados para gerar o BR Code. Útil para checar qualquer potencial transformação feita pela aplicação (como remoção de acentos ou caracteres especiais)"
           }
         },
         "example": {
-          "pixCopiaCola": "00020126730014BR.GOV.BCB.PIX0125chave.exemplo@exemplo.com0222Informacoes adicionais5204000053039865406123.455802BR5908Jane Doe6013Florianopolis6108123456786213050912345678963045F1E"
+          "pixCopiaCola": "00020126730014BR.GOV.BCB.PIX0125chave.exemplo@exemplo.com0222Informacoes adicionais5204000053039865406123.455802BR5913Joao da Silva6013Florianopolis61081234567862130509123456789630459BE",
+          "data": {
+            "additionalInfo": "Informacoes adicionais",
+            "merchantCity": "Florianopolis",
+            "merchantName": "Joao da Silva",
+            "transactionAmount": "432.10",
+            "pixKey": "chave.exemplo@exemplo.com",
+            "transactionId": "123456789",
+            "postalCode": "12345678"
+          }
         }
       },
       "PIX_BR_CODE_RESPONSE_500": {
