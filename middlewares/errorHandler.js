@@ -1,4 +1,5 @@
 import BaseError from '@/errors/BaseError';
+import InternalError from '@/errors/InternalError';
 
 export default function errorHandler(error, request, response) {
   console.log({
@@ -13,7 +14,7 @@ export default function errorHandler(error, request, response) {
       name: error.name,
     };
 
-    if (error.errors.length !== 0) {
+    if (error.errors.length > 0 && !(error instanceof InternalError)) {
       errorResponse.errors = error.errors;
     }
 
