@@ -24,7 +24,7 @@ const action = async (request, response) => {
   const transactionAmount = parseFloat(transactionAmountRaw).toFixed(2);
 
   try {
-    const brCode = buildBRCode({
+    const data = {
       additionalInfo,
       merchantCity,
       merchantName,
@@ -32,10 +32,12 @@ const action = async (request, response) => {
       pixKey,
       transactionId,
       postalCode,
-    });
+    };
+
+    const brCode = buildBRCode(data);
 
     response.status(200);
-    response.json({ pixCopiaCola: brCode });
+    response.json({ pixCopiaCola: brCode, data });
   } catch (error) {
     if (error instanceof BaseError) {
       throw error;
