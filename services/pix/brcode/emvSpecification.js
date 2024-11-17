@@ -19,7 +19,10 @@ const emvSpecification = {
         validate: (pixKey) => {
           const regexUuid =
             /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-          const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          const regexEmail =
+            /^(?=.{1,77}$)[a-z0-9.!#$&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/;
+
           const regexPhone = /(^55[1-9]{2}\d{8}$)|(^55[1-9]{2}9\d{8}$)/;
           const regexCpf = /^\d{11}$/;
           const regexCnpj = /^\d{14}$/;
