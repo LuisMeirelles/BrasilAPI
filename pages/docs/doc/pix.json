@@ -56,6 +56,54 @@
           }
         }
       }
+    },
+    "/pix/v1/br-code": {
+      "post": {
+        "tags": ["PIX"],
+        "summary": "Retorna o BR Code do PIX",
+        "description": "O retorno é um texto \"Pix copia e cola\", que pode ser utilizado para gerar um QR Code",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PIX_BR_CODE_REQUEST_BODY"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PIX_BR_CODE_RESPONSE_200"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PIX_BR_CODE_RESPONSE_500"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PIX_BR_CODE_RESPONSE_400"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -104,6 +152,179 @@
           "modalidade_participacao": "PDCT",
           "tipo_participacao": "DRCT",
           "inicio_operacao": "2020-11-03T09:30:00.000Z"
+        }
+      },
+      "PIX_BR_CODE_REQUEST_BODY": {
+        "title": "Pix Br Code Request Body",
+        "type": "object",
+        "required": [
+          "pixKey",
+          "merchantName",
+          "merchantCity",
+          "postalCode",
+          "transactionId"
+        ],
+        "properties": {
+          "pixKey": {
+            "description": "Chave PIX, que pode ser um número de telefone, CPF, CNPJ, e-mail ou chave aleatória (UUID).",
+            "oneOf": [
+              {
+                "title": "Número de telefone celular",
+                "type": "string",
+                "description": "Número de telefone começando com 55, seguido de 2 dígitos para o DDD e 8-9 dígitos para o número, iniciando obrigatoriamente com o número 9 caso tenha 9 dígitos. Os caracteres não numéricos serão ignorados.",
+                "pattern": "^55[1-9]{2}[0-9]{8,9}$"
+              },
+              {
+                "title": "Endereço de e-mail",
+                "type": "string",
+                "description": "E-mail válido",
+                "format": "email"
+              },
+              {
+                "title": "CPF",
+                "type": "string",
+                "description": "CPF no formato válido. Os caracteres não numéricos serão ignorados.",
+                "pattern": "(^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$)|(^\\d{11}$)"
+              },
+              {
+                "title": "CNPJ",
+                "type": "string",
+                "description": "CNPJ no formato válido. Os caracteres não numéricos serão ignorados.",
+                "pattern": "(^[0-9]{2}\\.[0-9]{3}\\.[0-9]{3}\\/[0-9]{4}-[0-9]{2}$)|(^\\d{14}$)"
+              },
+              {
+                "title": "Chave aleatória",
+                "type": "string",
+                "format": "uuid",
+                "description": "Chave aleatória no formato UUID",
+                "pattern": "^[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}$"
+              }
+            ]
+          },
+          "merchantName": {
+            "type": "string",
+            "description": "Nome do recebedor. Letras acentuadas serão transformadas em letras normais"
+          },
+          "merchantCity": {
+            "type": "string",
+            "description": "Cidade do recebedor. Letras acentuadas serão transformadas em letras normais"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "CEP do recebedor. Os caracteres não numéricos serão ignorados",
+            "format": "numeric"
+          },
+          "transactionId": {
+            "type": "string",
+            "description": "ID da transação"
+          },
+          "additionalInfo": {
+            "type": "string",
+            "description": "Informações adicionais. Letras acentuadas serão transformadas em letras normais"
+          },
+          "transactionAmount": {
+            "type": [
+              "string",
+              "number"
+            ],
+            "description": "Valor da transação",
+            "multipleOf": 0.01,
+            "minimum": 0.01
+          }
+        },
+        "example": {
+          "pixKey": "chave.exemplo@exemplo.com",
+          "additionalInfo": "Informações adicionais",
+          "merchantCity": "Florianópolis",
+          "merchantName": "João da Silva",
+          "transactionId": "123456789",
+          "postalCode": "12345-678",
+          "transactionAmount": 123.45
+        }
+      },
+      "PIX_BR_CODE_RESPONSE_200": {
+        "title": "Pix Br Code Response 200",
+        "type": "object",
+        "required": [
+          "pixCopiaCola"
+        ],
+        "properties": {
+          "pixCopiaCola": {
+            "type": "string",
+            "description": "Pix copia e cola em formato de texto (o QR Code pode ser gerado a partir desse texto)"
+          }
+        },
+        "example": {
+          "pixCopiaCola": "00020126730014BR.GOV.BCB.PIX0125chave.exemplo@exemplo.com0222Informacoes adicionais5204000053039865406123.455802BR5908Jane Doe6013Florianopolis6108123456786213050912345678963045F1E"
+        }
+      },
+      "PIX_BR_CODE_RESPONSE_500": {
+        "title": "Pix Br Code Response 500",
+        "type": "object",
+        "required": [
+          "message",
+          "type",
+          "name"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Mensagem de erro (fixo)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do erro (fixo)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do erro (fixo)"
+          }
+        },
+        "example": {
+          "message": "Erro ao gerar o BR Code",
+          "type": "internal",
+          "name": "BR_CODE_PIX_GENERATION_ERROR"
+        }
+      },
+      "PIX_BR_CODE_RESPONSE_400": {
+        "title": "Pix Br Code Response 400",
+        "type": "object",
+        "required": [
+          "message",
+          "type",
+          "name",
+          "errors"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Mensagem de erro human-readable contendo o nome do campo que não é válido (formato: \"O campo '\\<descricao do campo\\> [\\<nome do campo\\>]' não é válido.\")"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do erro (fixo)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do erro (fixo)"
+          },
+          "errors": {
+            "type": "array",
+            "description": "Lista de erros human-readable",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "O campo 'Chave Pix (CPF, CNPJ, e-mail, telefone ou chave aleatória) [pixKey]' não é válido.",
+          "type": "bad_request",
+          "name": "BadRequestError",
+          "errors": [
+            "Deve ter no mínimo 2 caracteres.",
+            "Não passou na validação personalizada."
+          ]
         }
       }
     }
