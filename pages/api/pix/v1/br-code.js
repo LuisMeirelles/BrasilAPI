@@ -3,26 +3,35 @@ import BaseError from '@/errors/BaseError';
 import InternalError from '@/errors/InternalError';
 import { buildBRCode } from '@/services/pix/brcode/buildBRCode';
 
+const normalizeAccentedString = (string) => {
+  return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};
+
 const action = async (request, response) => {
   const {
+    additionalInfo: additionalInfoRaw,
+    merchantCity: merchantCityRaw,
+    merchantName: merchantNameRaw,
+    transactionAmount: transactionAmountRaw,
     pixKey,
-    additionalInfo,
-    merchantCity,
-    merchantName,
     transactionId,
     postalCode,
-    transactionAmount,
   } = request.body;
+
+  const additionalInfo = normalizeAccentedString(additionalInfoRaw);
+  const merchantCity = normalizeAccentedString(merchantCityRaw);
+  const merchantName = normalizeAccentedString(merchantNameRaw);
+  const transactionAmount = parseFloat(transactionAmountRaw).toFixed(2);
 
   try {
     const brCode = buildBRCode({
-      pixKey,
       additionalInfo,
       merchantCity,
       merchantName,
+      transactionAmount,
+      pixKey,
       transactionId,
       postalCode,
-      transactionAmount,
     });
 
     response.status(200);
