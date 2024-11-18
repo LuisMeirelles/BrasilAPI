@@ -26,7 +26,7 @@ const emvSpecification = {
           const regexEmail =
             /^(?=.{1,77}$)[a-z0-9.!#$&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/;
 
-          const regexPhone = /(^55[1-9]{2}\d{8}$)|(^55[1-9]{2}9\d{8}$)/;
+          const regexPhone = /(^55[1-9]{2}9\d{8}$)|(^55[1-9]{2}[2-6]\d{7}$)/;
           const regexCpf = /^\d{11}$/;
           const regexCnpj = /^\d{14}$/;
 
