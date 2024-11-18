@@ -1,4 +1,5 @@
 import { cpfIsValid } from '@/lib/cpfValidator';
+import { cnpjIsValid } from '@/lib/cnpjValidator';
 
 const emvSpecification = {
   payloadFormat: {
@@ -36,7 +37,7 @@ const emvSpecification = {
             regexEmail.test(pixKey) ||
             regexPhone.test(numberOnlyPixKey) ||
             (regexCpf.test(numberOnlyPixKey) && cpfIsValid(numberOnlyPixKey)) ||
-            regexCnpj.test(numberOnlyPixKey)
+            (regexCnpj.test(numberOnlyPixKey) && cnpjIsValid(numberOnlyPixKey))
           );
         },
       },
