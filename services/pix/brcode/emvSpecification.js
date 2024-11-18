@@ -1,3 +1,5 @@
+import { cpfIsValid } from '@/lib/cpfValidator';
+
 const emvSpecification = {
   payloadFormat: {
     id: '00',
@@ -33,7 +35,7 @@ const emvSpecification = {
             regexUuid.test(pixKey) ||
             regexEmail.test(pixKey) ||
             regexPhone.test(numberOnlyPixKey) ||
-            regexCpf.test(numberOnlyPixKey) ||
+            (regexCpf.test(numberOnlyPixKey) && cpfIsValid(numberOnlyPixKey)) ||
             regexCnpj.test(numberOnlyPixKey)
           );
         },
