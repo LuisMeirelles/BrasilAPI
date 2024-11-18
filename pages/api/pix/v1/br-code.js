@@ -4,7 +4,7 @@ import InternalError from '@/errors/InternalError';
 import { buildBRCode } from '@/services/pix/brcode/buildBRCode';
 
 const normalizeAccentedString = (string) => {
-  return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return string?.normalize('NFD')?.replace(/[\u0300-\u036f]/g, '');
 };
 
 const action = async (request, response) => {

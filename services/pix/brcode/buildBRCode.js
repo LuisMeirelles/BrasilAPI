@@ -21,14 +21,6 @@ import { convertEMVFieldsIntoString } from './convertEMVFieldsIntoString';
  * @returns {string}
  */
 export const buildBRCode = (data) => {
-  const normalizedData = {};
-
-  Object.keys(data).forEach((key) => {
-    normalizedData[key] = String(data[key])
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-  });
-
   const fields = [];
 
   fields.push(emvSpecification.payloadFormat);
@@ -42,7 +34,7 @@ export const buildBRCode = (data) => {
     id: merchantAccountInfoSpecification.pixKey.id,
     value: checkAndReturnField(
       merchantAccountInfoSpecification.pixKey,
-      normalizedData.pixKey
+      data.pixKey
     ),
   };
 
@@ -50,7 +42,7 @@ export const buildBRCode = (data) => {
     id: merchantAccountInfoSpecification.additionalInfo.id,
     value: checkAndReturnField(
       merchantAccountInfoSpecification.additionalInfo,
-      normalizedData.additionalInfo
+      data.additionalInfo
     ),
   };
 
@@ -67,7 +59,7 @@ export const buildBRCode = (data) => {
     id: emvSpecification.transactionAmount.id,
     value: checkAndReturnField(
       emvSpecification.transactionAmount,
-      normalizedData.transactionAmount
+      data.transactionAmount
     ),
   });
 
@@ -77,16 +69,16 @@ export const buildBRCode = (data) => {
 
   fields.push({
     id: merchantName.id,
-    value: checkAndReturnField(merchantName, normalizedData.merchantName),
+    value: checkAndReturnField(merchantName, data.merchantName),
   });
   fields.push({
     id: merchantCity.id,
-    value: checkAndReturnField(merchantCity, normalizedData.merchantCity),
+    value: checkAndReturnField(merchantCity, data.merchantCity),
   });
 
   fields.push({
     id: postalCode.id,
-    value: checkAndReturnField(postalCode, normalizedData.postalCode),
+    value: checkAndReturnField(postalCode, data.postalCode),
   });
 
   fields.push({
@@ -95,7 +87,7 @@ export const buildBRCode = (data) => {
       id: emvSpecification.additionalDataFieldTemplate.fields.referenceLabel.id,
       value: checkAndReturnField(
         emvSpecification.additionalDataFieldTemplate.fields.referenceLabel,
-        normalizedData.transactionId
+        data.transactionId
       ),
     },
   });
