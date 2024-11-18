@@ -37,6 +37,7 @@
     "wikijs": "6.4.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "commitizen": "4.2.5",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "8.47.0",
